@@ -39,12 +39,14 @@ int max(short* arr)
 
 int fifo(short* array)
 {
-    int replacements = 0;
-    int count = sizeof(&array)/sizeof(short);
+    int replacements = -4;
+    int count = sizeof(&array);
 
     for (size_t i = 0; i < count; ++i)
     {
         //check if page is already there, if it is not perform the swap
+        printf("pages[]: [%d,%d,%d,%d], array[i]|i=%zu:%d\n", pages[0], pages[1], pages[2], pages[3], i, array[i]);
+
         if (pages[0]!=array[i] && pages[1]!=array[i] && pages[2]!=array[i] && pages[3]!=array[i])
         {
             //perform swap
@@ -57,13 +59,14 @@ int fifo(short* array)
             replacements++;
         }
     }
+    printf("pages[]: [%d,%d,%d,%d], array[i]|i=7:%d\n", pages[0], pages[1], pages[2], pages[3], array[7]);
     reset_pages();
     return replacements;
 }
 
 int lru(short* array)
 {
-    int replacements = 0;
+    int replacements = -4;
     int count = sizeof(&array)/sizeof(short);
 
     short pages_count[4];
@@ -93,10 +96,31 @@ int lru(short* array)
     return replacements;
 }
 
-// int opt(short* array)
-// {
-//
-// }
+int opt(short* array)
+{
+    int replacements = -4;
+    int count = sizeof(&array)/sizeof(short);
+
+    short pages_count[4];
+
+    for (size_t i = 0; i < count; ++i)
+    {
+        //check if page is already there, if it is not perform the swap
+        if (pages[0]!=array[i] && pages[1]!=array[i] && pages[2]!=array[i] && pages[3]!=array[i])
+        {
+            //perform swap
+            int itr = max(pages_count); //index to replace(itr)
+            pages[itr] = array[i];
+            pages_count[itr] = 0;
+
+            //increment replacements
+            replacements++;
+        }
+    }
+
+    reset_pages();
+    return replacements;
+}
 
 int main(int argc, char **argv)
 {
@@ -115,9 +139,9 @@ int main(int argc, char **argv)
         blah = strtok(NULL, ",");
     }
     int fifoR = fifo(array);
-    int lruR = lru(array);
+    //int lruR = lru(array);
     printf("fifo algorithm produced %d page replacements, for a rate of %f%%\n", fifoR, ((float)fifoR/(float)(index)));
-    printf("lru algorithm produced %d page replacements, for a rate of %f%%\n", lruR, ((float)lruR/(float)(index)));
+    //printf("lru algorithm produced %d page replacements, for a rate of %f%%\n", lruR, ((float)lruR/(float)(index)));
 
     return 0;
 }
