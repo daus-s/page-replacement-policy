@@ -1,3 +1,9 @@
+/*
+ *Daus(Davis) Carmichael, Rose Ramirez
+ *Assingment 7
+ */
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
